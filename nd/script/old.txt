@@ -1,0 +1,84 @@
+//function WW_HandleLoading(%game)
+//{
+//	if(!isObject(%game) || %game.class !$= "WWGame")
+//		return;
+//	%pattern = $WW::Dir::Maps @ %game.name @ "*.bls";
+//	if(getFileCount(%pattern) $= 0)
+//	{
+//		error("WarioWare : Microgame" SPC %game SPC "has no saves matching the pattern\'" SPC %pattern @ "\'!");
+//		return;
+//	}
+//	if(getFileCount(%pattern) == 1)
+//		serverDirectSaveFileLoad(findFirstFile(%pattern), 3, "", 1);
+//	else if(getFileCount(%pattern) > 1)
+//	{
+//		for(%i = findFirstFile(%pattern); %i !$= ""; %i = findNextFile(%pattern))
+//			%map[%maps++] = %i;
+//		serverDirectSaveFileLoad(%map[getRandom(1, %maps)], 3, "", 1);
+//	}
+//	
+//	if(%game.mapX > $WW::Mini.largestX)
+//		$WW::Mini.largestX = %game.mapX;
+//	if(%game.mapY > $WW::Mini.largestY)
+//		$WW::Mini.largestY = %game.mapY;
+//		
+//	%curX = getWord($WW::Mini.curPos, 0);
+//	%curY = getWord($WW::Mini.curPos, 1);
+//	%offX = getWord($WW::Mini.curOffset, 0);
+//	%offY = getWord($WW::Mini.curOffset, 1);
+//	
+//	if(%curX >= $WW::WrapX)
+//	{
+//		%offX = getWord($WW::DefaultOffset, 0);
+//		%offY += (($WW::Mini.largestY * 0.5) + 32);
+//		%curX = 0;
+//		%curY++;
+//	}
+//	else
+//	{
+//		%offX += ((%game.mapX * 0.5) + 32);
+//		%curX++;
+//	}
+//	
+//	$WW::Mini.offset[$WW::GameLoaded[%game]] = $loadOffset;
+//	$loadOffset = $WW::Mini.curOffset = %offX SPC %offY SPC "0";
+//	$WW::Mini.curPos = %curX SPC %curY;
+//}
+//
+//function WW_CheckOwnership()
+//{
+//	%mct = MainBrickGroup.getCount();
+//	for(%i = 0; %i < %mct; %i++)
+//	{
+//		%group = MainBrickGroup.getObject(%i);
+//		%ct = %group.getCount();
+//		if(%group.getID() $= BrickGroup_44.getID() || %group.getID() $= BrickGroup_888888.getID() || %ct $= 0)
+//			continue;
+//		for(%a = %ct; %group.getCount() > 0; %a--)
+//		{
+//			%brick = %group.getObject(%a);
+//			BrickGroup_44.add(%brick);
+//			%brick.client = "";
+//			%brick.stackBL_ID = 44;
+//		}
+//	}
+//}
+//
+//function WW_LoadGrid()
+//{
+//	if(!$WW::Mini.listed)
+//		return;
+//	for(%i = 0; %i < $WW::Mini.games; %i++)
+//	{
+//		%game = $WW::Mini.game[%i];
+//		if($WW::GameLoaded[%game] !$= "")
+//		{
+//			$WW::Mini.offset[%i] = $WW::Mini.offset[$WW::GameLoaded[%game]];
+//			continue;
+//		}
+//		else
+//			$WW::GameLoaded[%game] = %i;
+//		WW_HandleLoading($WW::Mini.game[%i]);
+//	}
+//	WW_CheckOwnership();
+//}
